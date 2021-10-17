@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api\v1\settings;
 
 use App\Http\Controllers\api\v1\ApiCrudHandler;
-use App\Http\Controllers\Controller;
 use App\Models\Settings\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController as BaseController;
@@ -14,9 +13,9 @@ class DepartmentController extends BaseController
 {
     protected $apiCrudHandler;
 
-	public function __construct()
+    public function __construct(ApiCrudHandler $apiCrudHandler)
     {
-        $this->apiCrudHandler = new ApiCrudHandler();
+        $this->apiCrudHandler = $apiCrudHandler;
     }
 
     public function index(Request $request)
@@ -34,7 +33,7 @@ class DepartmentController extends BaseController
      * @param UserRequest $request
      * @return Array
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         //If ID then update, else create
         try {
@@ -46,11 +45,9 @@ class DepartmentController extends BaseController
     }
 
     /**
-    *
-     * @param Request $request
-     * @param String $moduleName
-     * @param String $modelClassName
      *
+     * @param int $id
+     * @param Request $request
      * @return Array
      */
     public function update(int $id, Request $request)

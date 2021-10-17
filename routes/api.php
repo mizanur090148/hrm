@@ -26,11 +26,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::post('/register', [RegisterController::class, 'register']);
-Route::post('/group', [FactoryController::class, 'groupStore']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-//Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::prefix('settings')->group(function () {
         Route::post('/group', [FactoryController::class, 'groupStore']);
 		Route::get('/factories', [FactoryController::class, 'index']);
@@ -54,4 +53,4 @@ Route::post('/login', [AuthController::class, 'login']);
         Route::post('/weekends', [WeekendController::class, 'store']);
         Route::post('/weekends', [WeekendController::class, 'update']);
 	});
-//});
+});

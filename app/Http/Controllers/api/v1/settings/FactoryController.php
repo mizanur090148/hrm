@@ -31,11 +31,8 @@ class FactoryController extends BaseController
     }
 
     /**
-    *
-     * @param Request $request
-     * @param String $moduleName
-     * @param String $modelClassName
      *
+     * @param FactoryRequest $request
      * @return Array
      */
     public function store(FactoryRequest $request)
@@ -51,9 +48,6 @@ class FactoryController extends BaseController
     /**
      *
      * @param Request $request
-     * @param String $moduleName
-     * @param String $modelClassName
-     *
      * @return Array
      */
     public function groupStore(Request $request)

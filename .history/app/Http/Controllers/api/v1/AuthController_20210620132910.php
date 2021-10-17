@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\api\v1;
 
+//use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\BaseController as BaseController;
+use App\Http\Controllers\Api\ApiCrudHandler;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Validator;
 use Auth;
 
 class AuthController extends BaseController
@@ -13,16 +16,20 @@ class AuthController extends BaseController
 
     public function login(Request $request)
     {
-        $credential = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
+        try {
+            $credential = [
+                'email' => $request->email,
+                'password' => $request->password
+            ];
 
-        if (auth()->attempt($credential)) {
-            $user = Auth::user();
-            return response()->json($user, 200);
+            if (auth()->attempt($credential)) {
+                $user = Auth::user();
+                return response()->json($user, 200);
+            }
+        } catch (Exception $e) {
+
         }
-        
+
         return $this->sendError('Sorry!!! User name or password mismatch');
     }
 

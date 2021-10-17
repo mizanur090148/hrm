@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Api\ApiCrudHandler;
-use App\Requests\OutletRequest;
-use App\Models\Outlet;
-use Illuminate\Http\Response;
+use App\Requests\ColorRequest;
+use App\Models\Color;
 use Validator;
 
-class OutletController extends BaseController
+class ColorController extends BaseController
 {
     protected $apiCrudHandler;
 
@@ -22,22 +22,25 @@ class OutletController extends BaseController
     public function index(Request $request)
     {
         try {
-            $modelData = $this->apiCrudHandler->index($request, Outlet::class);
+            $modelData = $this->apiCrudHandler->index($request, Color::class, $where = [], $with = []);
             return $this->sendResponse($modelData);
         } catch (Exception $e) {
             return $this->sendError($e->getMessage());
-        }
+        }        
     }
 
     /**
+    *
+     * @param Request $request
+     * @param String $moduleName
+     * @param String $modelClassName   
      *
-     * @param OutletRequest $request
      * @return Array
      */
-    public function store(OutletRequest $request)
-    {
-        try {
-            $modelData = $this->apiCrudHandler->store($request, Outlet::class);
+    public function store(ColorRequest $request)
+    {       
+        try {           
+            $modelData = $this->apiCrudHandler->store($request, Color::class);           
             return $this->sendResponse($modelData);
         } catch (Exception $ex) {
             return $this->sendError($e->getMessage());
@@ -45,18 +48,20 @@ class OutletController extends BaseController
     }
 
     /**
+    *
+     * @param Request $request
+     * @param String $moduleName
+     * @param String $modelClassName   
      *
-     * @param $id
-     * @param OutletRequest $request
-     * @param Outlet $outlet
      * @return Array
      */
-    public function update($id, OutletRequest $request, Outlet $outlet)
+    public function update($id, ColorRequest $request, Color $color)
     {
         //If ID then update, else create
         try {
+            $this->authorize('update', $color);
             $request->request->add(['id' => $id]);
-            $modelData = $this->apiCrudHandler->update($request, Outlet::class);
+            $modelData = $this->apiCrudHandler->update($request, Color::class);
             return $this->sendResponse($modelData);
         } catch (Exception $ex) {
             return $this->sendError($e->getMessage());
@@ -67,15 +72,15 @@ class OutletController extends BaseController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
-    public function delete($id, Outlet $outlet)
+    public function delete($id, Color $color)
     {
         try {
-            $delete = $this->apiCrudHandler->delete($id, Outlet::class);
+            $delete = $this->apiCrudHandler->delete($id, Color::class);
             return $this->sendResponse($delete);
         } catch (Exception $e) {
             return $this->sendError($e->getMessage());
-        }
+        }  
     }
 }

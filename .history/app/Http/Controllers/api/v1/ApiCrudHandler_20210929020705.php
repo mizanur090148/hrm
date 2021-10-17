@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
+
 class ApiCrudHandler
 {
     /**
@@ -17,14 +18,17 @@ class ApiCrudHandler
     {
         // Load model class object
         $modelData = new $modelClassName();
+
         // where
         if (count($where)) {
             $modelData = $modelData->where($where);
         }
+
         // eager load data
         if (count($with)) {
             $modelData = $modelData->with($with);
         }
+
         $modelData = $modelData->orderBy($request->sortByColumn ?? 'id', $request->sortBy ?? 'desc');
         return $modelData->get();
     }
@@ -35,20 +39,23 @@ class ApiCrudHandler
      *
      * @return Array
      */
-    public function all(Request $request, $modelClassName, array $where, array $with)
+    public function index11(Request $request, $modelClassName, array $where, array $with)
     {
         // Load model class object
         $modelData = new $modelClassName();
+
         // where
         if (count($where)) {
             $modelData = $modelData->where($where);
         }
+
         // eager load data
         if (count($with)) {
             $modelData = $modelData->with($with);
         }
+
         $modelData = $modelData->orderBy($request->sortByColumn ?? 'id', $request->sortBy ?? 'desc');
-        return $modelData->get();
+        return $modelData->paginate();
     }
 
     /**

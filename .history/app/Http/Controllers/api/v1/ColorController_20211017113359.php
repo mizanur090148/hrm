@@ -6,26 +6,26 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Api\ApiCrudHandler;
-use App\Http\Requests\ProjectRequest;
-use App\Project;
+use App\Requests\ColorRequest;
+use App\Models\Color;
 use Validator;
 
-class ProjectController extends BaseController
+class ColorController extends BaseController
 {
     protected $apiCrudHandler;
 
-	public function __construct()
+    public function __construct(ApiCrudHandler $apiCrudHandler)
     {
-        $this->apiCrudHandler = new ApiCrudHandler();
+        $this->apiCrudHandler = $apiCrudHandler;
     }
 
     public function index(Request $request)
     {
         try {
-        	$modelData = $this->apiCrudHandler->index($request, Project::class, $with = []);
-        	return $this->sendResponse($modelData);
+            $modelData = $this->apiCrudHandler->index($request, Color::class, $where = [], $with = []);
+            return $this->sendResponse($modelData);
         } catch (Exception $e) {
-        	return $this->sendError($e->getMessage());
+            return $this->sendError($e->getMessage());
         }        
     }
 
@@ -37,11 +37,11 @@ class ProjectController extends BaseController
      *
      * @return Array
      */
-    public function store(ProjectRequest $request)
+    public function store(ColorRequest $request)
     {       
         try {           
-        	$modelData = $this->apiCrudHandler->store($request, Project::class);           
-        	return $this->sendResponse($modelData);
+            $modelData = $this->apiCrudHandler->store($request, Color::class);           
+            return $this->sendResponse($modelData);
         } catch (Exception $ex) {
             return $this->sendError($e->getMessage());
         }
@@ -55,14 +55,14 @@ class ProjectController extends BaseController
      *
      * @return Array
      */
-    public function update($id, ProjectRequest $request, Project $project)
+    public function update($id, ColorRequest $request, Color $color)
     {
-    	//If ID then update, else create
+        //If ID then update, else create
         try {
-            $this->authorize('update', $project);
+            $this->authorize('update', $color);
             $request->request->add(['id' => $id]);
-        	$modelData = $this->apiCrudHandler->update($request, Project::class);
-        	return $this->sendResponse($modelData);
+            $modelData = $this->apiCrudHandler->update($request, Color::class);
+            return $this->sendResponse($modelData);
         } catch (Exception $ex) {
             return $this->sendError($e->getMessage());
         }
@@ -74,14 +74,13 @@ class ProjectController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id, Project $project)
+    public function delete($id, Color $color)
     {
         try {
-            $this->authorize('delete', $project);
-        	$delete = $this->apiCrudHandler->delete($id, Project::class);
-        	return $this->sendResponse($delete);
+            $delete = $this->apiCrudHandler->delete($id, Color::class);
+            return $this->sendResponse($delete);
         } catch (Exception $e) {
-        	return $this->sendError($e->getMessage());
+            return $this->sendError($e->getMessage());
         }  
     }
 }

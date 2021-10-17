@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Group;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Api\ApiCrudHandler;
@@ -15,9 +14,9 @@ class UserController extends BaseController
 {
     protected $apiCrudHandler;
 
-	public function __construct()
+    public function __construct(ApiCrudHandler $apiCrudHandler)
     {
-        $this->apiCrudHandler = new ApiCrudHandler();
+        $this->apiCrudHandler = $apiCrudHandler;
     }
 
     public function index(Request $request)
@@ -33,11 +32,10 @@ class UserController extends BaseController
 
     /**
      *
-     * @param Request $request
-     * @param String $moduleName
-     * @param String $modelClassName
-     *
+     * @param UserRequest $request
+     * @param User $user
      * @return Array
+     * @throws AuthorizationException
      */
     public function store(UserRequest $request, User $user)
     {

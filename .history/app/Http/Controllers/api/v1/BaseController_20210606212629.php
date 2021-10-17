@@ -31,11 +31,13 @@ class BaseController extends Controller
      */
     public function responseOk($data = null, $message = "Request processed successfully"): JsonResponse
     {
-        $response = [
+        /*$response = [
            'success' => true,
-           'message' => $message,
-           'data'    => $data
-        ];    
+           'message' => $message
+        ]; */
+        
+        $response['data'] = $data;
+       
         return response()->json($response, 200);
     }
 
@@ -54,7 +56,7 @@ class BaseController extends Controller
         if ($data) {
             $response['data'] = $data;
         }
-        return response()->json($response);
+        return response()->json($response, 201);
     }
 
     /**
